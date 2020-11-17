@@ -2,13 +2,18 @@
 
 Learn and validate/test OpenNLP model to find named entities based on annotated corpus.
 
-# Configuration
+## Prerequisites
+
+- Java 11
+- Gradle
+
+## Configuration
 
 Add text file with annotated entities in OpenNLP at `src/main/resources/test_corpus.txt` path 
 As an example you can use my project to create such file (annotated corpus):
 [https://github.com/nnovakova/opennlp-annotator](https://github.com/nnovakova/opennlp-annotator)  
 
-# Run
+## Run
 
 Run the following command to train machine learning model:
 

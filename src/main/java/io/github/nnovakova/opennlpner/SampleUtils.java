@@ -17,7 +17,7 @@ class SampleUtils {
     }
 
     private static ObjectStream<NameSample> loadSampleStreamFrom(String filePath) throws IOException {
-        final MarkableFileInputStreamFactory in = new MarkableFileInputStreamFactory(new File(filePath));
+        final var in = new MarkableFileInputStreamFactory(new File(filePath));
         return new NameSampleDataStream(new PlainTextByLineStream(in, StandardCharsets.UTF_8));
     }
 }

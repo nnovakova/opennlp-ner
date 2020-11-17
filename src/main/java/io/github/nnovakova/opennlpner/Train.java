@@ -3,6 +3,7 @@ package io.github.nnovakova.opennlpner;
 import opennlp.tools.namefind.*;
 import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.TrainingParameters;
+import opennlp.tools.util.model.ModelType;
 
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
@@ -14,7 +15,7 @@ import static io.github.nnovakova.opennlpner.Config.onlpModelPath;
 public class Train {
 
     public static void main(String[] args) throws IOException {
-        TokenNameFinderModel model = trainModel();
+        var model = trainModel();
         saveModel(model);
     }
 
@@ -23,12 +24,12 @@ public class Train {
     private static TokenNameFinderModel trainModel() throws IOException {
         TokenNameFinderModel model;
         try (ObjectStream<NameSample> sampleStream = SampleUtils.loadSampleStream()) {
-            final TrainingParameters params = new TrainingParameters();
+            var params = new TrainingParameters();
             params.put(TrainingParameters.ITERATIONS_PARAM, 100);// number of training iterations
             params.put(TrainingParameters.CUTOFF_PARAM, 3);//minimal number of times a feature must be seen
-            //params.put(TrainingParameters.ALGORITHM_PARAM, ModelType.MAXENT.toString());
+            params.put(TrainingParameters.ALGORITHM_PARAM, ModelType.MAXENT.toString());
 
-            TokenNameFinderFactory nameFinderFactory = TokenNameFinderFactory.create(null, null, Collections.emptyMap(), new BioCodec());
+            var nameFinderFactory = TokenNameFinderFactory.create(null, null, Collections.emptyMap(), new BioCodec());
             String type = null; // null value - to use names from corpus.
             model = NameFinderME.train("de", type, sampleStream, params, nameFinderFactory);
         }

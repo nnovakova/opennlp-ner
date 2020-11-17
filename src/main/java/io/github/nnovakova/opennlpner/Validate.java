@@ -1,6 +1,7 @@
 package io.github.nnovakova.opennlpner;
 
-import opennlp.tools.namefind.*;
+import opennlp.tools.namefind.NameFinderME;
+import opennlp.tools.namefind.TokenNameFinderModel;
 import opennlp.tools.util.Span;
 
 import java.io.FileInputStream;
@@ -16,31 +17,24 @@ public class Validate {
 
     private static void validate() throws IOException {
         try (InputStream modelIn = new FileInputStream(Config.onlpModelPath)) {
-            TokenNameFinderModel model = new TokenNameFinderModel(modelIn);
-            NameFinderME nameFinder = new NameFinderME(model);
-
-
-            String sentence = "Keine Mittellinienverlagerung.\n" +
+            var model = new TokenNameFinderModel(modelIn);
+            var nameFinder = new NameFinderME(model);
+            var sentence = "Keine Mittellinienverlagerung.\n" +
                     "Keine intrakranielle Blutung.\n" +
                     "Kein klares fokales, kein generalisiertes Hirnödem.\n" +
-                    "Derzeit keine eindeutige frische, keine grobe alte Ischämie.";;
+                    "Derzeit keine eindeutige frische, keine grobe alte Ischämie.";
+            ;
             sentence = sentence.replaceAll("(?!\\s)\\W", " $0");
-            String[] s = sentence.split(" ");
+            var words = sentence.split(" ");
 
             // Get NE in sentence and positions of found NE
-
-            Span[] nameSpans = nameFinder.find(s);
+            var nameSpans = nameFinder.find(words);
             System.out.println(Arrays.toString(nameSpans));
-            String ent;
 
-            for (Span nameSpan : nameSpans) {
-                int entityLength = nameSpan.getEnd() - nameSpan.getStart();
-                for (int i = 1; i <= entityLength; i++) {
-                    ent = sentence.split(" ")[nameSpan.getStart()];
-                    System.out.println(ent);
-                }
+            for (Span span : nameSpans) {
+                var ent = words[span.getStart()];
+                System.out.println(ent);
             }
-
         }
     }
 }
